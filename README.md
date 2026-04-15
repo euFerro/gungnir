@@ -1,4 +1,4 @@
-# @bardjs/back
+# @bardjs/backend
 
 Declarative Express framework for Bard.js backend applications. Define your config, controllers, and modules — the framework handles everything else.
 

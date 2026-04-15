@@ -1,9 +1,12 @@
 {
-  "name": "@bardjs/back",
-  "version": "0.3.5",
-  "description": "Express backend framework for Bard.js backend applications",
+  "name": "@bard.js/backend",
+  "version": "1.0.0",
+  "description": "@bard.js/backend is a declarative framework for backend applications",
   "main": "dist/index.js",
   "types": "dist/index.d.ts",
+  "publishConfig": {
+    "access": "public"
+  },
   "scripts": {
     "build": "tsc",
     "dev": "tsc --watch",
@@ -12,12 +15,12 @@
     "prepublishOnly": "npm run build"
   },
   "keywords": [
-    "bardjs",
+    "bard.js",
     "framework",
     "express"
   ],
   "author": "Bard.js",
-  "license": "UNLICENSED",
+  "license": "Apache-2.0",
   "files": [
     "dist"
   ],
