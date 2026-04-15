@@ -1,0 +1,36 @@
+{
+  "name": "@bardjs/back",
+  "version": "0.3.5",
+  "description": "Express backend framework for Bard.js backend applications",
+  "main": "dist/index.js",
+  "types": "dist/index.d.ts",
+  "scripts": {
+    "build": "tsc",
+    "dev": "tsc --watch",
+    "test": "jest",
+    "test:coverage": "jest --coverage",
+    "prepublishOnly": "npm run build"
+  },
+  "keywords": [
+    "bardjs",
+    "framework",
+    "express"
+  ],
+  "author": "Bard.js",
+  "license": "UNLICENSED",
+  "files": [
+    "dist"
+  ],
+  "peerDependencies": {
+    "express": "^4.0.0 || ^5.0.0"
+  },
+  "devDependencies": {
+    "@types/express": "^5.0.0",
+    "@types/jest": "^30.0.0",
+    "@types/node": "^22.10.0",
+    "express": "^4.21.2",
+    "jest": "^30.3.0",
+    "ts-jest": "^29.4.9",
+    "typescript": "^5.7.2"
+  }
+}
