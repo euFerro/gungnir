@@ -1,6 +1,6 @@
-# @bardjs/backend
+# Gungnir
 
-Declarative Express framework for Bard.js backend applications. Define your config, controllers, and modules — the framework handles everything else.
+Gungnir is a Declarative framework for backend applications. Define your config, controllers, and modules — the framework handles everything else.
 
 ## Introduction
 
@@ -21,7 +21,7 @@ The result: a framework that is easier to write, easier to read, and easier to m
 ## Install
 
 ```bash
-npm install @bardjs/back
+npm install @gungnir/back
 ```
 
 **Peer dependency:** `express` ^4.0.0 || ^5.0.0
@@ -58,7 +58,7 @@ This makes your code testable (swap real implementations for mocks), decoupled (
 ```typescript
 // src/server.config.ts
 import 'dotenv/config'; // side-effect — loads .env into process.env
-import { defineConfig } from '@bardjs/back';
+import { defineConfig } from '@gungnir/back';
 
 defineConfig({
   port: { env: 'PORT', default: 3000 },
@@ -99,7 +99,7 @@ Define an interface for the contract and implement it with a plain class. Contro
 
 ```typescript
 // src/modules/users/services/users.services.ts
-import { NotFoundException } from '@bardjs/back';
+import { NotFoundException } from '@gungnir/back';
 
 export interface IUsersService {
   findAll(params: PaginationParams): Promise<PaginatedResult<User>>;
@@ -130,7 +130,7 @@ class UsersService implements IUsersService {
 
 ```typescript
 // src/modules/users/controllers/users.controllers.ts
-import { defineController } from '@bardjs/back';
+import { defineController } from '@gungnir/back';
 import type { IUsersService } from '../services/users.service';
 
 export const listUsersController = defineController<IUsersService>({
@@ -172,7 +172,7 @@ export const createUserController = defineController<IUsersService>({
 });
 ```
 
-`defineController` is generic and returns a factory. Call the factory with your service implementation to get a `BardController`.
+`defineController` is generic and returns a factory. Call the factory with your service implementation to get a `GungnirController`.
 
 ### Step 4 — Define a module
 
@@ -180,7 +180,7 @@ The module file is the **composition root** — you instantiate implementations,
 
 ```typescript
 // src/modules/users/users.module.ts
-import { defineModule } from '@bardjs/back';
+import { defineModule } from '@gungnir/back';
 import { listUsersController, findUserController, createUserController } from './controllers/users.controllers';
 
 const usersDb = new UsersPostgresDb();
@@ -213,7 +213,7 @@ POST /api/users
 ```typescript
 // src/server.ts
 import './server.config'; // side-effect — runs defineConfig()
-import { app, config, logger } from '@bardjs/back';
+import { app, config, logger } from '@gungnir/back';
 
 const log = logger.child('Server');
 
@@ -255,7 +255,7 @@ Registers application configuration. Call once at the top of your entry point.
 
 ```typescript
 import 'dotenv/config';
-import { defineConfig } from '@bardjs/back';
+import { defineConfig } from '@gungnir/back';
 
 defineConfig({
   port: 3000,                          // static number
@@ -281,7 +281,7 @@ defineConfig({
 Singleton with resolved configuration. Available after `defineConfig()`.
 
 ```typescript
-import { config } from '@bardjs/back';
+import { config } from '@gungnir/back';
 
 config.port                  // number
 config.prefix                // string (e.g. '/api')
@@ -297,7 +297,7 @@ config.isProduction()        // boolean
 Generic factory that returns a `ControllerFactory<TService>`. The handler receives `(req, res, service)` — the service is injected by `defineModule` at registration time.
 
 ```typescript
-import { defineController } from '@bardjs/back';
+import { defineController } from '@gungnir/back';
 
 const myController = defineController<IMyService>({
   handler: async (req, res, service) => {
@@ -316,10 +316,10 @@ const myController = defineController<IMyService>({
 
 ### `defineModule(options)`
 
-Declares a module with routes. The module is queued and registered automatically when `app.listen()` is called. Routes receive built `BardController` instances — call your `defineController` factories with the service implementation in the routes array.
+Declares a module with routes. The module is queued and registered automatically when `app.listen()` is called. Routes receive built `GungnirController` instances — call your `defineController` factories with the service implementation in the routes array.
 
 ```typescript
-import { defineModule } from '@bardjs/back';
+import { defineModule } from '@gungnir/back';
 
 const ordersService = new OrdersService(new OrdersRepository(db));
 
@@ -343,7 +343,7 @@ defineModule({
 The application singleton. No need to instantiate — it's created by the framework.
 
 ```typescript
-import { app } from '@bardjs/back';
+import { app } from '@gungnir/back';
 
 // Add global middleware
 app.useMiddleware(cors());
@@ -360,7 +360,7 @@ await app.shutdown(); // async — awaits all module destroy functions
 Zero-dependency colored logger. Controlled by `APP_DEBUG_LEVEL` env var.
 
 ```typescript
-import { logger } from '@bardjs/back';
+import { logger } from '@gungnir/back';
 
 logger.info('App started', { port: 3000 });
 
@@ -499,7 +499,7 @@ defineController({
 
 ## Middleware
 
-### Per-Controller
+### Per-GungnirController
 
 ```typescript
 defineController({
@@ -526,7 +526,7 @@ defineModule({
 Throw anywhere in handlers or middleware — the framework catches and formats the response.
 
 ```typescript
-import { NotFoundException, BadRequestException } from '@bardjs/back';
+import { NotFoundException, BadRequestException } from '@gungnir/back';
 
 throw new NotFoundException('Order not found');
 // -> 404 { "error": "Order not found" }

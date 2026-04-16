@@ -1,6 +1,6 @@
 import type { Request, Response } from 'express';
 import { defineController } from './define-controller';
-import { BardController } from './bard-controller';
+import { GungnirController } from './gungnir-controller';
 
 const makeReq = (): Request =>
   ({ ip: '127.0.0.1', socket: { remoteAddress: '127.0.0.1' } } as unknown as Request);
@@ -35,7 +35,7 @@ describe('defineController', () => {
     expect(typeof factory).toBe('function');
   }, 1000);
 
-  it('should produce a BardController when factory is called with service', () => {
+  it('should produce a GungnirController when factory is called with service', () => {
     // Arrange
     const factory = defineController<IMockService>({ handler: jest.fn() });
 
@@ -43,7 +43,7 @@ describe('defineController', () => {
     const controller = factory(mockService);
 
     // Assert
-    expect(controller).toBeInstanceOf(BardController);
+    expect(controller).toBeInstanceOf(GungnirController);
   }, 1000);
 
   it('should pass service as third argument to handler', async () => {

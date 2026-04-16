@@ -6,7 +6,7 @@ Registers application configuration. Call once at the top of your entry point.
 
 ```typescript
 import 'dotenv/config';
-import { defineConfig } from '@bardjs/back';
+import { defineConfig } from '@gungnir/back';
 
 defineConfig({
   port: 3000,                          // static number
@@ -32,7 +32,7 @@ defineConfig({
 Singleton with resolved configuration. Available after `defineConfig()`.
 
 ```typescript
-import { config } from '@bardjs/back';
+import { config } from '@gungnir/back';
 
 config.port                  // number
 config.prefix                // string (e.g. '/api')

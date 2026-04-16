@@ -1,5 +1,5 @@
 import type { Request, Response, NextFunction } from 'express';
-import { BardController } from './bard-controller';
+import { GungnirController } from './gungnir-controller';
 import { TooManyRequestsException } from '../exceptions/http.exception';
 
 const makeReq = (overrides: Partial<Request> = {}): Request =>
@@ -16,7 +16,7 @@ const makeRes = (): Response => {
   } as unknown as Response;
 };
 
-describe('BardController', () => {
+describe('GungnirController', () => {
   beforeEach(() => {
     jest.clearAllMocks();
   });
@@ -25,7 +25,7 @@ describe('BardController', () => {
     it('should call the handler function', async () => {
       // Arrange
       const handlerFn = jest.fn();
-      const controller = new BardController(handlerFn);
+      const controller = new GungnirController(handlerFn);
       const req = makeReq();
       const res = makeRes();
 
@@ -38,7 +38,7 @@ describe('BardController', () => {
 
     it('should set X-RateLimit-Remaining header', async () => {
       // Arrange
-      const controller = new BardController(jest.fn(), { throttleConfig: { limit: 10, ttl: 60_000 } });
+      const controller = new GungnirController(jest.fn(), { throttleConfig: { limit: 10, ttl: 60_000 } });
       const req = makeReq();
       const res = makeRes();
 
@@ -51,7 +51,7 @@ describe('BardController', () => {
 
     it('should throw TooManyRequestsException when rate limited', async () => {
       // Arrange
-      const controller = new BardController(jest.fn(), { throttleConfig: { limit: 1, ttl: 60_000 } });
+      const controller = new GungnirController(jest.fn(), { throttleConfig: { limit: 1, ttl: 60_000 } });
       const req = makeReq();
       const res = makeRes();
       await controller.handler(req, res);
@@ -62,7 +62,7 @@ describe('BardController', () => {
 
     it('should set Retry-After header when rate limited', async () => {
       // Arrange
-      const controller = new BardController(jest.fn(), { throttleConfig: { limit: 1, ttl: 60_000 } });
+      const controller = new GungnirController(jest.fn(), { throttleConfig: { limit: 1, ttl: 60_000 } });
       const req = makeReq();
       const res = makeRes();
       await controller.handler(req, res);
@@ -78,7 +78,7 @@ describe('BardController', () => {
     it('should use fallback IP from socket when req.ip is undefined', async () => {
       // Arrange
       const handlerFn = jest.fn();
-      const controller = new BardController(handlerFn);
+      const controller = new GungnirController(handlerFn);
       const req = makeReq({ ip: undefined });
       const res = makeRes();
 
@@ -99,7 +99,7 @@ describe('BardController', () => {
         next();
       };
       const handlerFn = () => { callOrder.push('handler'); };
-      const controller = new BardController(handlerFn, { middlewares: [middleware] });
+      const controller = new GungnirController(handlerFn, { middlewares: [middleware] });
 
       // Act
       await controller.handler(makeReq(), makeRes());
@@ -120,7 +120,7 @@ describe('BardController', () => {
         next();
       };
       const handlerFn = () => { callOrder.push('handler'); };
-      const controller = new BardController(handlerFn, { middlewares: [mw1, mw2] });
+      const controller = new GungnirController(handlerFn, { middlewares: [mw1, mw2] });
 
       // Act
       await controller.handler(makeReq(), makeRes());
@@ -135,7 +135,7 @@ describe('BardController', () => {
       const blockingMiddleware = (_req: Request, res: Response) => {
         res.status(403).json({ error: 'Forbidden' });
       };
-      const controller = new BardController(handlerFn, { middlewares: [blockingMiddleware] });
+      const controller = new GungnirController(handlerFn, { middlewares: [blockingMiddleware] });
 
       // Act
       await controller.handler(makeReq(), makeRes());
@@ -149,7 +149,7 @@ describe('BardController', () => {
       const errorMiddleware = () => {
         throw new Error('Middleware error');
       };
-      const controller = new BardController(jest.fn(), { middlewares: [errorMiddleware] });
+      const controller = new GungnirController(jest.fn(), { middlewares: [errorMiddleware] });
 
       // Act & Assert
       await expect(controller.handler(makeReq(), makeRes())).rejects.toThrow('Middleware error');
@@ -160,7 +160,7 @@ describe('BardController', () => {
       const errorMiddleware = (_req: Request, _res: Response, next: NextFunction) => {
         next(new Error('Next error'));
       };
-      const controller = new BardController(jest.fn(), { middlewares: [errorMiddleware] });
+      const controller = new GungnirController(jest.fn(), { middlewares: [errorMiddleware] });
 
       // Act & Assert
       await expect(controller.handler(makeReq(), makeRes())).rejects.toThrow('Next error');
@@ -173,7 +173,7 @@ describe('BardController', () => {
         await Promise.resolve();
         next();
       };
-      const controller = new BardController(handlerFn, { middlewares: [asyncMiddleware] });
+      const controller = new GungnirController(handlerFn, { middlewares: [asyncMiddleware] });
 
       // Act
       await controller.handler(makeReq(), makeRes());
@@ -189,7 +189,7 @@ describe('BardController', () => {
         await Promise.resolve();
         res.status(400).json({ error: 'Bad' });
       };
-      const controller = new BardController(handlerFn, { middlewares: [asyncBlockingMiddleware] });
+      const controller = new GungnirController(handlerFn, { middlewares: [asyncBlockingMiddleware] });
 
       // Act
       await controller.handler(makeReq(), makeRes());
@@ -202,7 +202,7 @@ describe('BardController', () => {
   describe('throttleConfig', () => {
     it('should use STANDARD preset by default', async () => {
       // Arrange
-      const controller = new BardController(jest.fn());
+      const controller = new GungnirController(jest.fn());
       const req = makeReq();
       const res = makeRes();
 
@@ -215,7 +215,7 @@ describe('BardController', () => {
 
     it('should accept a preset string', async () => {
       // Arrange
-      const controller = new BardController(jest.fn(), { throttleConfig: 'SECURITY' });
+      const controller = new GungnirController(jest.fn(), { throttleConfig: 'SECURITY' });
       const req = makeReq();
       const res = makeRes();
 
@@ -228,7 +228,7 @@ describe('BardController', () => {
 
     it('should accept a custom config object', async () => {
       // Arrange
-      const controller = new BardController(jest.fn(), { throttleConfig: { limit: 50, ttl: 30_000 } });
+      const controller = new GungnirController(jest.fn(), { throttleConfig: { limit: 50, ttl: 30_000 } });
       const req = makeReq();
       const res = makeRes();
 
@@ -243,7 +243,7 @@ describe('BardController', () => {
   describe('metadata', () => {
     it('should return preset name and resolved config for preset throttle', () => {
       // Arrange
-      const controller = new BardController(jest.fn(), { throttleConfig: 'SECURITY' });
+      const controller = new GungnirController(jest.fn(), { throttleConfig: 'SECURITY' });
 
       // Act
       const meta = controller.metadata;
@@ -255,7 +255,7 @@ describe('BardController', () => {
 
     it('should return null preset for custom throttle config', () => {
       // Arrange
-      const controller = new BardController(jest.fn(), { throttleConfig: { limit: 25, ttl: 120_000 } });
+      const controller = new GungnirController(jest.fn(), { throttleConfig: { limit: 25, ttl: 120_000 } });
 
       // Act
       const meta = controller.metadata;
@@ -267,7 +267,7 @@ describe('BardController', () => {
 
     it('should default to STANDARD preset', () => {
       // Arrange
-      const controller = new BardController(jest.fn());
+      const controller = new GungnirController(jest.fn());
 
       // Act
       const meta = controller.metadata;

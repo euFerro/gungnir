@@ -2,10 +2,10 @@
 
 ## `defineModule(options)`
 
-Declares a module with routes. The module is queued and registered automatically when `app.listen()` is called. Routes receive built `BardController` instances — call your `defineController` factories with the service implementation in the routes array.
+Declares a module with routes. The module is queued and registered automatically when `app.listen()` is called. Routes receive built `GungnirController` instances — call your `defineController` factories with the service implementation in the routes array.
 
 ```typescript
-import { defineModule } from '@bardjs/back';
+import { defineModule } from '@gungnir/back';
 
 const ordersService = new OrdersService(new OrdersRepository(db));
 

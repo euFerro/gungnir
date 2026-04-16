@@ -1,5 +1,5 @@
 import { defineModule, flushPendingModules } from './define-module';
-import { BardController } from './bard-controller';
+import { GungnirController } from './gungnir-controller';
 
 describe('defineModule', () => {
   beforeEach(() => {
@@ -9,7 +9,7 @@ describe('defineModule', () => {
 
   it('should queue the module definition', () => {
     // Arrange
-    const controller = new BardController(jest.fn());
+    const controller = new GungnirController(jest.fn());
 
     // Act
     defineModule({
@@ -26,7 +26,7 @@ describe('defineModule', () => {
 
   it('should queue multiple modules', () => {
     // Arrange
-    const controller = new BardController(jest.fn());
+    const controller = new GungnirController(jest.fn());
 
     // Act
     defineModule({
@@ -49,7 +49,7 @@ describe('defineModule', () => {
 
   it('should clear the queue after flush', () => {
     // Arrange
-    const controller = new BardController(jest.fn());
+    const controller = new GungnirController(jest.fn());
     defineModule({
       name: 'FlushModule',
       prefix: '/flush',
@@ -66,8 +66,8 @@ describe('defineModule', () => {
 
   it('should preserve route definitions', () => {
     // Arrange
-    const getController = new BardController(jest.fn());
-    const postController = new BardController(jest.fn());
+    const getController = new GungnirController(jest.fn());
+    const postController = new GungnirController(jest.fn());
 
     // Act
     defineModule({
@@ -89,7 +89,7 @@ describe('defineModule', () => {
   it('should preserve destroy function', () => {
     // Arrange
     const destroyFn = jest.fn();
-    const controller = new BardController(jest.fn());
+    const controller = new GungnirController(jest.fn());
 
     // Act
     defineModule({
@@ -107,7 +107,7 @@ describe('defineModule', () => {
   it('should preserve middlewares', () => {
     // Arrange
     const middleware = jest.fn();
-    const controller = new BardController(jest.fn());
+    const controller = new GungnirController(jest.fn());
 
     // Act
     defineModule({

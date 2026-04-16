@@ -1,14 +1,14 @@
-import { BardConfig, defineConfig, config } from './bard-config';
+import { GungnirConfig, defineConfig, config } from './gungnir-config';
 
-describe('BardConfig', () => {
-  let bardConfig: BardConfig;
+describe('GungnirConfig', () => {
+  let GungnirConfig: GungnirConfig;
 
   const originalEnv = process.env;
 
   beforeEach(() => {
     jest.clearAllMocks();
     process.env = { ...originalEnv };
-    bardConfig = new BardConfig();
+    GungnirConfig = new GungnirConfig();
   });
 
   afterAll(() => {
@@ -21,30 +21,30 @@ describe('BardConfig', () => {
       process.env.NODE_ENV = 'development';
 
       // Act
-      bardConfig.init({});
+      GungnirConfig.init({});
 
       // Assert
-      expect(bardConfig.port).toBe(3000);
-      expect(bardConfig.jsonLimit).toBe('10mb');
-      expect(bardConfig.environment).toBe('development');
-      expect(bardConfig.isInitialized()).toBe(true);
+      expect(GungnirConfig.port).toBe(3000);
+      expect(GungnirConfig.jsonLimit).toBe('10mb');
+      expect(GungnirConfig.environment).toBe('development');
+      expect(GungnirConfig.isInitialized()).toBe(true);
     });
 
     it('should only initialize once', () => {
       // Arrange & Act
-      bardConfig.init({ port: 4000 });
-      bardConfig.init({ port: 5000 });
+      GungnirConfig.init({ port: 4000 });
+      GungnirConfig.init({ port: 5000 });
 
       // Assert
-      expect(bardConfig.port).toBe(4000);
+      expect(GungnirConfig.port).toBe(4000);
     });
 
     it('should resolve port from static number', () => {
       // Arrange & Act
-      bardConfig.init({ port: 8080 });
+      GungnirConfig.init({ port: 8080 });
 
       // Assert
-      expect(bardConfig.port).toBe(8080);
+      expect(GungnirConfig.port).toBe(8080);
     });
 
     it('should resolve port from env var with fallback to default', () => {
@@ -52,10 +52,10 @@ describe('BardConfig', () => {
       process.env.PORT = '9090';
 
       // Act
-      bardConfig.init({ port: { env: 'PORT', default: 3000 } });
+      GungnirConfig.init({ port: { env: 'PORT', default: 3000 } });
 
       // Assert
-      expect(bardConfig.port).toBe(9090);
+      expect(GungnirConfig.port).toBe(9090);
     });
 
     it('should use default port when env var is not set', () => {
@@ -63,34 +63,34 @@ describe('BardConfig', () => {
       delete process.env.PORT;
 
       // Act
-      bardConfig.init({ port: { env: 'PORT', default: 6767 } });
+      GungnirConfig.init({ port: { env: 'PORT', default: 6767 } });
 
       // Assert
-      expect(bardConfig.port).toBe(6767);
+      expect(GungnirConfig.port).toBe(6767);
     });
 
     it('should set jsonLimit', () => {
       // Arrange & Act
-      bardConfig.init({ jsonLimit: '50mb' });
+      GungnirConfig.init({ jsonLimit: '50mb' });
 
       // Assert
-      expect(bardConfig.jsonLimit).toBe('50mb');
+      expect(GungnirConfig.jsonLimit).toBe('50mb');
     });
 
     it('should set prefix', () => {
       // Arrange & Act
-      bardConfig.init({ prefix: '/api' });
+      GungnirConfig.init({ prefix: '/api' });
 
       // Assert
-      expect(bardConfig.prefix).toBe('/api');
+      expect(GungnirConfig.prefix).toBe('/api');
     });
 
     it('should default prefix to empty string', () => {
       // Arrange & Act
-      bardConfig.init({});
+      GungnirConfig.init({});
 
       // Assert
-      expect(bardConfig.prefix).toBe('');
+      expect(GungnirConfig.prefix).toBe('');
     });
   });
 
@@ -100,12 +100,12 @@ describe('BardConfig', () => {
       process.env.DB_URL = 'postgres://localhost/test';
 
       // Act
-      bardConfig.init({
+      GungnirConfig.init({
         env: { DB_URL: { required: true } },
       });
 
       // Assert
-      expect(bardConfig.env.DB_URL).toBe('postgres://localhost/test');
+      expect(GungnirConfig.env.DB_URL).toBe('postgres://localhost/test');
     });
 
     it('should use default when env var is not set', () => {
@@ -113,12 +113,12 @@ describe('BardConfig', () => {
       delete process.env.DB_POOL;
 
       // Act
-      bardConfig.init({
+      GungnirConfig.init({
         env: { DB_POOL: { default: '10' } },
       });
 
       // Assert
-      expect(bardConfig.env.DB_POOL).toBe('10');
+      expect(GungnirConfig.env.DB_POOL).toBe('10');
     });
 
     it('should throw when required env var is missing', () => {
@@ -127,7 +127,7 @@ describe('BardConfig', () => {
 
       // Act & Assert
       expect(() =>
-        bardConfig.init({
+        GungnirConfig.init({
           env: { SECRET_KEY: { required: true } },
         }),
       ).toThrow('Missing required environment variable: SECRET_KEY');
@@ -139,7 +139,7 @@ describe('BardConfig', () => {
 
       // Act & Assert
       expect(() =>
-        bardConfig.init({
+        GungnirConfig.init({
           env: { SECRET_KEY: { required: true } },
         }),
       ).not.toThrow();
@@ -167,11 +167,11 @@ describe('BardConfig', () => {
       process.env.NODE_ENV = 'development';
 
       // Act
-      bardConfig.init({ environments });
+      GungnirConfig.init({ environments });
 
       // Assert
-      expect(bardConfig.endpoints.api).toBe('https://dev.example.com/api');
-      expect(bardConfig.endpoints.auth).toBe('https://dev.example.com/auth');
+      expect(GungnirConfig.endpoints.api).toBe('https://dev.example.com/api');
+      expect(GungnirConfig.endpoints.auth).toBe('https://dev.example.com/auth');
     });
 
     it('should resolve endpoints for production when NODE_ENV is production', () => {
@@ -179,11 +179,11 @@ describe('BardConfig', () => {
       process.env.NODE_ENV = 'production';
 
       // Act
-      bardConfig.init({ environments });
+      GungnirConfig.init({ environments });
 
       // Assert
-      expect(bardConfig.endpoints.api).toBe('https://example.com/api');
-      expect(bardConfig.endpoints.auth).toBe('https://example.com/auth');
+      expect(GungnirConfig.endpoints.api).toBe('https://example.com/api');
+      expect(GungnirConfig.endpoints.auth).toBe('https://example.com/auth');
     });
 
     it('should fallback to development when NODE_ENV is unknown', () => {
@@ -191,10 +191,10 @@ describe('BardConfig', () => {
       process.env.NODE_ENV = 'staging';
 
       // Act
-      bardConfig.init({ environments });
+      GungnirConfig.init({ environments });
 
       // Assert
-      expect(bardConfig.endpoints.api).toBe('https://dev.example.com/api');
+      expect(GungnirConfig.endpoints.api).toBe('https://dev.example.com/api');
     });
   });
 
@@ -204,10 +204,10 @@ describe('BardConfig', () => {
       process.env.NODE_ENV = 'production';
 
       // Act
-      bardConfig.init({});
+      GungnirConfig.init({});
 
       // Assert
-      expect(bardConfig.isProduction()).toBe(true);
+      expect(GungnirConfig.isProduction()).toBe(true);
     });
 
     it('should return false for isProduction when NODE_ENV is development', () => {
@@ -215,25 +215,25 @@ describe('BardConfig', () => {
       process.env.NODE_ENV = 'development';
 
       // Act
-      bardConfig.init({});
+      GungnirConfig.init({});
 
       // Assert
-      expect(bardConfig.isProduction()).toBe(false);
+      expect(GungnirConfig.isProduction()).toBe(false);
     });
   });
 
   describe('reset', () => {
     it('should reset all state to defaults', () => {
       // Arrange
-      bardConfig.init({ port: 9999, jsonLimit: '50mb' });
+      GungnirConfig.init({ port: 9999, jsonLimit: '50mb' });
 
       // Act
-      bardConfig.reset();
+      GungnirConfig.reset();
 
       // Assert
-      expect(bardConfig.port).toBe(3000);
-      expect(bardConfig.jsonLimit).toBe('10mb');
-      expect(bardConfig.isInitialized()).toBe(false);
+      expect(GungnirConfig.port).toBe(3000);
+      expect(GungnirConfig.jsonLimit).toBe('10mb');
+      expect(GungnirConfig.isInitialized()).toBe(false);
     });
   });
 });

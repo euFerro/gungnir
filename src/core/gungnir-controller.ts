@@ -65,7 +65,7 @@ function runMiddleware(mw: RequestHandler, req: Request, res: Response): Promise
   });
 }
 
-export class BardController {
+export class GungnirController {
   private readonly handleFn: RouteHandler;
   private readonly throttleConfig: ThrottlePreset | ThrottleConfig;
   private readonly middlewares: ReadonlyArray<RequestHandler>;

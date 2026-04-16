@@ -12,7 +12,7 @@ export interface ModuleOptions {
   middlewares?: ReadonlyArray<RequestHandler>;
 }
 
-export class BardModule {
+export class Module {
   public readonly router: Router = Router();
   public readonly name: string;
   private readonly registerFn: RegisterFn;
@@ -21,12 +21,12 @@ export class BardModule {
 
   constructor(register: RegisterFn, options?: ModuleOptions) {
     this.registerFn = register;
-    this.name = options?.name ?? 'BardModule';
+    this.name = options?.name ?? 'Module';
     this.destroyFn = options?.destroy;
     this.middlewares = options?.middlewares ?? [];
   }
 
-  /** Called by BardExpressApp during startup. */
+  /** Called by GungnirApp during startup. */
   async register(): Promise<void> {
     this.middlewares.forEach((mw) => this.router.use(mw));
     await this.registerFn(this.router);

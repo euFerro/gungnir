@@ -1,7 +1,7 @@
 import type { Request, Response, NextFunction } from 'express';
-import { BardModule } from './bard-module';
+import { Module } from './gungnir-module';
 
-describe('BardModule', () => {
+describe('Module', () => {
   beforeEach(() => {
     jest.clearAllMocks();
   });
@@ -10,7 +10,7 @@ describe('BardModule', () => {
     it('should call the register function with the router', async () => {
       // Arrange
       const registerFn = jest.fn();
-      const mod = new BardModule(registerFn);
+      const mod = new Module(registerFn);
 
       // Act
       await mod.register();
@@ -22,7 +22,7 @@ describe('BardModule', () => {
     it('should handle async register functions', async () => {
       // Arrange
       let registered = false;
-      const mod = new BardModule(async () => {
+      const mod = new Module(async () => {
         await Promise.resolve();
         registered = true;
       });
@@ -41,7 +41,7 @@ describe('BardModule', () => {
         callOrder.push('middleware');
         next();
       };
-      const mod = new BardModule(
+      const mod = new Module(
         () => { callOrder.push('register'); },
         { middlewares: [middleware] },
       );
@@ -59,7 +59,7 @@ describe('BardModule', () => {
     it('should call the destroy function when provided', async () => {
       // Arrange
       const destroyFn = jest.fn();
-      const mod = new BardModule(jest.fn(), { destroy: destroyFn });
+      const mod = new Module(jest.fn(), { destroy: destroyFn });
 
       // Act
       await mod.destroy();
@@ -70,7 +70,7 @@ describe('BardModule', () => {
 
     it('should not throw when destroy is not provided', async () => {
       // Arrange
-      const mod = new BardModule(jest.fn());
+      const mod = new Module(jest.fn());
 
       // Act & Assert
       await expect(mod.destroy()).resolves.toBeUndefined();
@@ -79,7 +79,7 @@ describe('BardModule', () => {
     it('should handle async destroy functions', async () => {
       // Arrange
       let destroyed = false;
-      const mod = new BardModule(jest.fn(), {
+      const mod = new Module(jest.fn(), {
         destroy: async () => {
           await Promise.resolve();
           destroyed = true;
@@ -95,17 +95,17 @@ describe('BardModule', () => {
   });
 
   describe('options', () => {
-    it('should default name to BardModule', () => {
+    it('should default name to Module', () => {
       // Arrange & Act
-      const mod = new BardModule(jest.fn());
+      const mod = new Module(jest.fn());
 
       // Assert
-      expect(mod.name).toBe('BardModule');
+      expect(mod.name).toBe('Module');
     }, 1000);
 
     it('should use provided name', () => {
       // Arrange & Act
-      const mod = new BardModule(jest.fn(), { name: 'UsersModule' });
+      const mod = new Module(jest.fn(), { name: 'UsersModule' });
 
       // Assert
       expect(mod.name).toBe('UsersModule');
@@ -113,7 +113,7 @@ describe('BardModule', () => {
 
     it('should have a router instance', () => {
       // Arrange & Act
-      const mod = new BardModule(jest.fn());
+      const mod = new Module(jest.fn());
 
       // Assert
       expect(mod.router).toBeDefined();

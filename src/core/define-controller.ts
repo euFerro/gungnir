@@ -1,11 +1,11 @@
-import { BardController } from './bard-controller';
-import type { ResponseDefinition } from './bard-controller';
+import { GungnirController } from './gungnir-controller';
+import type { ResponseDefinition } from './gungnir-controller';
 import type { Request, Response, RequestHandler } from 'express';
 import type { ThrottlePreset, ThrottleConfig } from '../throttle/throttle.constants';
 
 export type ServiceRouteHandler<TService> = (req: Request, res: Response, service: TService) => Promise<void> | void;
 
-export type ControllerFactory<TService> = (service: TService) => BardController;
+export type ControllerFactory<TService> = (service: TService) => GungnirController;
 
 export interface DefineControllerOptions<TService> {
   handler: ServiceRouteHandler<TService>;
@@ -21,7 +21,7 @@ export interface DefineControllerOptions<TService> {
 
 /**
  * Generic controller factory. Returns a function that, when called with
- * a service instance, produces a configured BardController.
+ * a service instance, produces a configured GungnirController.
  *
  * The handler receives (req, res, service) — no need for manual closure wiring.
  * Used with defineModule, which injects the service automatically.
@@ -31,7 +31,7 @@ export const defineController = <TService>(
 ): ControllerFactory<TService> => {
   return (service: TService) => {
     const { handler, ...controllerOptions } = options;
-    return new BardController(
+    return new GungnirController(
       (req, res) => handler(req, res, service),
       controllerOptions,
     );

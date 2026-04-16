@@ -1,12 +1,12 @@
 import type { RequestHandler } from 'express';
-import { BardController } from './bard-controller';
+import { GungnirController } from './gungnir-controller';
 
 type HttpMethod = 'GET' | 'POST' | 'PUT' | 'PATCH' | 'DELETE';
 
 export interface RouteDefinition {
   method: HttpMethod;
   path: string;
-  controller: BardController;
+  controller: GungnirController;
   /** Human-readable description for auto-generated /spec route */
   description?: string;
 }
@@ -21,10 +21,10 @@ export interface DefineModuleOptions {
   destroy?: () => Promise<void> | void;
 }
 
-/** Internal queue — flushed by BardApp.listen() */
+/** Internal queue — flushed by GungnirApp.listen() */
 const pendingModules: DefineModuleOptions[] = [];
 
-/** Returns and clears the pending module queue. Called by BardApp.listen(). */
+/** Returns and clears the pending module queue. Called by GungnirApp.listen(). */
 export const flushPendingModules = (): DefineModuleOptions[] => {
   const modules = [...pendingModules];
   pendingModules.length = 0;

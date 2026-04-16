@@ -15,7 +15,7 @@ export interface DefineConfigOptions {
   env?: Record<string, EnvVarDefinition>;
 }
 
-export class BardConfig {
+export class GungnirConfig {
   private _port: number = 3000;
   private _prefix: string = '';
   private _jsonLimit: string = '10mb';
@@ -90,7 +90,7 @@ export class BardConfig {
 }
 
 // Singleton
-export const config = new BardConfig();
+export const config = new GungnirConfig();
 
 export const defineConfig = (options: DefineConfigOptions): void => {
   config.init(options);

@@ -2,15 +2,15 @@ import { randomUUID } from 'crypto';
 import express, { Express, Router } from 'express';
 import { globalExceptionMiddleware } from '../middlewares/global-exception.middleware';
 import { requestInterceptorMiddleware } from '../middlewares/request-interceptor.middleware';
-import { BardModule } from '../core/bard-module';
-import { logger } from '../logger/bard-logger';
-import { config } from '../config/bard-config';
+import { Module } from '../core/gungnir-module';
+import { logger } from '../logger/gungnir-logger';
+import { config } from '../config/gungnir-config';
 import { flushPendingModules } from '../core/define-module';
 import type { DefineModuleOptions } from '../core/define-module';
 
 const log = logger.child('App');
 
-export interface BardAppOptions {
+export interface GungnirAppOptions {
   port?: number;
   cors?: boolean;
   jsonLimit?: string;
@@ -34,15 +34,15 @@ interface RegisteredModuleSpec {
   }[];
 }
 
-export class BardApp {
+export class GungnirApp {
   public readonly serverInstanceUid: string = randomUUID();
   private app: Express;
-  private options: BardAppOptions;
-  private modules: { prefix: string; module: BardModule }[] = [];
+  private options: GungnirAppOptions;
+  private modules: { prefix: string; module: Module }[] = [];
   private moduleSpecs: RegisteredModuleSpec[] = [];
   private initialized = false;
 
-  constructor(options: BardAppOptions = {}) {
+  constructor(options: GungnirAppOptions = {}) {
     this.app = express();
     this.options = options;
     this.app.use(requestInterceptorMiddleware);
@@ -59,7 +59,7 @@ export class BardApp {
   }
 
   /** Register a module: calls register(), mounts its router, tracks for shutdown */
-  async registerModule(prefix: string, module: BardModule): Promise<this> {
+  async registerModule(prefix: string, module: Module): Promise<this> {
     this.ensureInit();
     await module.register();
     this.app.use(prefix, module.router);
@@ -115,9 +115,9 @@ export class BardApp {
     const pending = flushPendingModules();
 
     // Build specs first so global route has all data
-    const builtModules: { module: BardModule; fullPrefix: string; spec: RegisteredModuleSpec }[] = [];
+    const builtModules: { module: Module; fullPrefix: string; spec: RegisteredModuleSpec }[] = [];
     for (const options of pending) {
-      const module = new BardModule(
+      const module = new Module(
         (router) => {
           for (const route of options.routes) {
             const method = route.method.toLowerCase() as 'get' | 'post' | 'put' | 'patch' | 'delete';
@@ -194,8 +194,8 @@ export class BardApp {
   }
 }
 
-/** @deprecated Use BardApp instead */
-export const BardExpressApp = BardApp;
+/** @deprecated Use GungnirApp instead */
+export const GungnirApp = GungnirApp;
 
 // -- Singleton --
-export const app = new BardApp();
+export const app = new GungnirApp();

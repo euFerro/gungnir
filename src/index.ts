@@ -1,12 +1,12 @@
 // App (singleton)
-export { app } from './app/bard-app';
+export { app } from './app/gungnir-app';
 
 // Config
-export { defineConfig, config } from './config/bard-config';
-export type { DefineConfigOptions, EnvVarDefinition, EnvironmentConfig } from './config/bard-config';
+export { defineConfig, config } from './config/gungnir-config';
+export type { DefineConfigOptions, EnvVarDefinition, EnvironmentConfig } from './config/gungnir-config';
 
 // Logger
-export { logger } from './logger/bard-logger';
+export { logger } from './logger/gungnir-logger';
 
 // Declarative API
 export { defineController } from './core/define-controller';
@@ -37,4 +37,4 @@ export {
   GatewayTimeoutException,
 } from './exceptions/http.exception';
 export type { ExceptionMetadata } from './exceptions/http.exception';
-export type { ResponseDefinition } from './core/bard-controller';
+export type { ResponseDefinition } from './core/gungnir-controller';

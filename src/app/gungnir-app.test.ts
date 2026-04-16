@@ -1,7 +1,7 @@
-import { BardApp, BardExpressApp } from './bard-app';
-import { BardModule } from '../core/bard-module';
+import { GungnirApp, GungnirApp } from './gungnir-app';
+import { Module } from '../core/gungnir-module';
 
-describe('BardApp', () => {
+describe('GungnirApp', () => {
   beforeEach(() => {
     jest.clearAllMocks();
   });
@@ -9,7 +9,7 @@ describe('BardApp', () => {
   describe('constructor', () => {
     it('should create an app with default options', () => {
       // Arrange & Act
-      const app = new BardApp();
+      const app = new GungnirApp();
 
       // Assert
       expect(app.serverInstanceUid).toBeDefined();
@@ -20,8 +20,8 @@ describe('BardApp', () => {
   describe('serverInstanceUid', () => {
     it('should generate unique UIDs for each instance', () => {
       // Arrange & Act
-      const app1 = new BardApp();
-      const app2 = new BardApp();
+      const app1 = new GungnirApp();
+      const app2 = new GungnirApp();
 
       // Assert
       expect(app1.serverInstanceUid).not.toBe(app2.serverInstanceUid);
@@ -32,8 +32,8 @@ describe('BardApp', () => {
     it('should call register on the module', async () => {
       // Arrange
       const registerFn = jest.fn();
-      const mod = new BardModule(registerFn, { name: 'TestModule' });
-      const app = new BardApp();
+      const mod = new Module(registerFn, { name: 'TestModule' });
+      const app = new GungnirApp();
 
       // Act
       await app.registerModule('/test', mod);
@@ -44,8 +44,8 @@ describe('BardApp', () => {
 
     it('should return the app instance for chaining', async () => {
       // Arrange
-      const mod = new BardModule(jest.fn());
-      const app = new BardApp();
+      const mod = new Module(jest.fn());
+      const app = new GungnirApp();
 
       // Act
       const result = await app.registerModule('/test', mod);
@@ -60,9 +60,9 @@ describe('BardApp', () => {
       // Arrange
       const destroyFn1 = jest.fn();
       const destroyFn2 = jest.fn();
-      const mod1 = new BardModule(jest.fn(), { destroy: destroyFn1 });
-      const mod2 = new BardModule(jest.fn(), { destroy: destroyFn2 });
-      const app = new BardApp();
+      const mod1 = new Module(jest.fn(), { destroy: destroyFn1 });
+      const mod2 = new Module(jest.fn(), { destroy: destroyFn2 });
+      const app = new GungnirApp();
       await app.registerModule('/a', mod1);
       await app.registerModule('/b', mod2);
 
@@ -76,7 +76,7 @@ describe('BardApp', () => {
 
     it('should not throw when no modules are registered', async () => {
       // Arrange
-      const app = new BardApp();
+      const app = new GungnirApp();
 
       // Act & Assert
       await expect(app.shutdown()).resolves.toBeUndefined();
@@ -86,7 +86,7 @@ describe('BardApp', () => {
   describe('getExpressApp', () => {
     it('should return the underlying Express app', () => {
       // Arrange
-      const app = new BardApp();
+      const app = new GungnirApp();
 
       // Act
       const expressApp = app.getExpressApp();
@@ -100,7 +100,7 @@ describe('BardApp', () => {
   describe('useMiddleware', () => {
     it('should add middleware to the Express app', () => {
       // Arrange
-      const app = new BardApp();
+      const app = new GungnirApp();
       const middleware = jest.fn();
 
       // Act
@@ -114,7 +114,7 @@ describe('BardApp', () => {
   describe('useRouter', () => {
     it('should return the app instance for chaining', () => {
       // Arrange
-      const app = new BardApp();
+      const app = new GungnirApp();
       const { Router } = require('express');
       const router = Router();
 
@@ -127,9 +127,9 @@ describe('BardApp', () => {
   });
 
   describe('backward compatibility', () => {
-    it('should export BardExpressApp as alias for BardApp', () => {
+    it('should export GungnirApp as alias for GungnirApp', () => {
       // Assert
-      expect(BardExpressApp).toBe(BardApp);
+      expect(GungnirApp).toBe(GungnirApp);
     }, 1000);
   });
 });

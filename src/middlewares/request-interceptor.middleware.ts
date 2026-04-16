@@ -1,5 +1,5 @@
 import { Request, Response, NextFunction } from 'express';
-import { logger } from '../logger/bard-logger';
+import { logger } from '../logger/gungnir-logger';
 
 const log = logger.child('HTTP');
 

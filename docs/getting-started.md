@@ -5,7 +5,7 @@
 ```typescript
 // src/server.config.ts
 import 'dotenv/config'; // side-effect — loads .env into process.env
-import { defineConfig } from '@bardjs/back';
+import { defineConfig } from '@gungnir/back';
 
 defineConfig({
   port: { env: 'PORT', default: 3000 },
@@ -46,7 +46,7 @@ Define an interface for the contract and implement it with a plain class. Contro
 
 ```typescript
 // src/modules/users/services/users.services.ts
-import { NotFoundException } from '@bardjs/back';
+import { NotFoundException } from '@gungnir/back';
 
 export interface IUsersService {
   findAll(params: PaginationParams): Promise<PaginatedResult<User>>;
@@ -77,7 +77,7 @@ class UsersService implements IUsersService {
 
 ```typescript
 // src/modules/users/controllers/users.controllers.ts
-import { defineController } from '@bardjs/back';
+import { defineController } from '@gungnir/back';
 import type { IUsersService } from '../services/users.service';
 
 export const listUsersController = defineController<IUsersService>({
@@ -119,7 +119,7 @@ export const createUserController = defineController<IUsersService>({
 });
 ```
 
-`defineController` is generic and returns a factory. Call the factory with your service implementation to get a `BardController`.
+`defineController` is generic and returns a factory. Call the factory with your service implementation to get a `GungnirController`.
 
 ## Step 4 — Define a module
 
@@ -127,7 +127,7 @@ The module file is the **composition root** — you instantiate implementations,
 
 ```typescript
 // src/modules/users/users.module.ts
-import { defineModule } from '@bardjs/back';
+import { defineModule } from '@gungnir/back';
 import { listUsersController, findUserController, createUserController } from './controllers/users.controllers';
 
 const usersDb = new UsersPostgresDb();
@@ -160,7 +160,7 @@ POST /api/users
 ```typescript
 // src/server.ts
 import './server.config'; // side-effect — runs defineConfig()
-import { app, config, logger } from '@bardjs/back';
+import { app, config, logger } from '@gungnir/back';
 
 const log = logger.child('Server');
 

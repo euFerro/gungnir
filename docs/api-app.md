@@ -5,7 +5,7 @@
 The application singleton. No need to instantiate — it's created by the framework.
 
 ```typescript
-import { app } from '@bardjs/back';
+import { app } from '@gungnir/back';
 
 // Add global middleware
 app.useMiddleware(cors());
@@ -22,7 +22,7 @@ await app.shutdown(); // async — awaits all module destroy functions
 Zero-dependency colored logger. Controlled by `APP_DEBUG_LEVEL` env var.
 
 ```typescript
-import { logger } from '@bardjs/back';
+import { logger } from '@gungnir/back';
 
 logger.info('App started', { port: 3000 });
 

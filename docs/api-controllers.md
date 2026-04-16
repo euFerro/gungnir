@@ -5,7 +5,7 @@
 Generic factory that returns a `ControllerFactory<TService>`. The handler receives `(req, res, service)` — the service is injected when the factory is called in the module file.
 
 ```typescript
-import { defineController } from '@bardjs/back';
+import { defineController } from '@gungnir/back';
 
 const myController = defineController<IMyService>({
   handler: async (req, res, service) => {
@@ -72,7 +72,7 @@ defineController({
 
 ## Middleware
 
-### Per-Controller
+### Per-GungnirController
 
 ```typescript
 defineController({
@@ -88,7 +88,7 @@ Middlewares run after rate limiting and before the handler. If a middleware thro
 Throw anywhere in handlers or middleware — the framework catches and formats the response.
 
 ```typescript
-import { NotFoundException, BadRequestException } from '@bardjs/back';
+import { NotFoundException, BadRequestException } from '@gungnir/back';
 
 throw new NotFoundException('Order not found');
 // -> 404 { "error": "Order not found" }

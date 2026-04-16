@@ -1,6 +1,6 @@
-import { BardLogger } from './bard-logger';
+import { GungnirLogger } from './gungnir-logger';
 
-describe('BardLogger', () => {
+describe('GungnirLogger', () => {
   const originalEnv = process.env;
 
   beforeEach(() => {
@@ -17,7 +17,7 @@ describe('BardLogger', () => {
     it('should write debug messages to stdout', () => {
       // Arrange
       const writeSpy = jest.spyOn(process.stdout, 'write').mockImplementation(() => true);
-      const log = new BardLogger('Test');
+      const log = new GungnirLogger('Test');
 
       // Act
       log.debug('debug message');
@@ -32,7 +32,7 @@ describe('BardLogger', () => {
     it('should write info messages to stdout', () => {
       // Arrange
       const writeSpy = jest.spyOn(process.stdout, 'write').mockImplementation(() => true);
-      const log = new BardLogger('Test');
+      const log = new GungnirLogger('Test');
 
       // Act
       log.info('info message');
@@ -47,7 +47,7 @@ describe('BardLogger', () => {
     it('should write warn messages to stdout', () => {
       // Arrange
       const writeSpy = jest.spyOn(process.stdout, 'write').mockImplementation(() => true);
-      const log = new BardLogger('Test');
+      const log = new GungnirLogger('Test');
 
       // Act
       log.warn('warn message');
@@ -62,7 +62,7 @@ describe('BardLogger', () => {
     it('should write error messages to stderr', () => {
       // Arrange
       const writeSpy = jest.spyOn(process.stderr, 'write').mockImplementation(() => true);
-      const log = new BardLogger('Test');
+      const log = new GungnirLogger('Test');
 
       // Act
       log.error('error message');
@@ -79,7 +79,7 @@ describe('BardLogger', () => {
     it('should include context tag in output', () => {
       // Arrange
       const writeSpy = jest.spyOn(process.stdout, 'write').mockImplementation(() => true);
-      const log = new BardLogger('MyModule');
+      const log = new GungnirLogger('MyModule');
 
       // Act
       log.info('test');
@@ -95,7 +95,7 @@ describe('BardLogger', () => {
     it('should create a child logger with a different context', () => {
       // Arrange
       const writeSpy = jest.spyOn(process.stdout, 'write').mockImplementation(() => true);
-      const parent = new BardLogger('Parent');
+      const parent = new GungnirLogger('Parent');
 
       // Act
       const child = parent.child('Child');
@@ -112,7 +112,7 @@ describe('BardLogger', () => {
     it('should include metadata in output', () => {
       // Arrange
       const writeSpy = jest.spyOn(process.stdout, 'write').mockImplementation(() => true);
-      const log = new BardLogger('Test');
+      const log = new GungnirLogger('Test');
 
       // Act
       log.info('request', { method: 'GET', url: '/api' });
@@ -133,7 +133,7 @@ describe('BardLogger', () => {
       // Arrange
       process.env.APP_DEBUG_LEVEL = 'info';
       const writeSpy = jest.spyOn(process.stdout, 'write').mockImplementation(() => true);
-      const log = new BardLogger('Test');
+      const log = new GungnirLogger('Test');
 
       // Act
       log.debug('should not appear');
@@ -149,7 +149,7 @@ describe('BardLogger', () => {
       process.env.APP_DEBUG_LEVEL = 'silent';
       const stdoutSpy = jest.spyOn(process.stdout, 'write').mockImplementation(() => true);
       const stderrSpy = jest.spyOn(process.stderr, 'write').mockImplementation(() => true);
-      const log = new BardLogger('Test');
+      const log = new GungnirLogger('Test');
 
       // Act
       log.debug('nope');

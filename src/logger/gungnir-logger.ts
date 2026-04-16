@@ -51,7 +51,7 @@ const formatJson = (data: Record<string, unknown>): string => {
   return entries.map(([k, v]) => `${COLORS.dim}${k}=${COLORS.reset}${String(v)}`).join(' ');
 };
 
-export class BardLogger {
+export class GungnirLogger {
   private readonly level: number;
   private readonly context: string;
 
@@ -60,8 +60,8 @@ export class BardLogger {
     this.context = context;
   }
 
-  child(context: string): BardLogger {
-    return new BardLogger(context);
+  child(context: string): GungnirLogger {
+    return new GungnirLogger(context);
   }
 
   debug(message: string, meta?: Record<string, unknown>): void {
@@ -96,4 +96,4 @@ export class BardLogger {
 }
 
 /** Global framework logger instance */
-export const logger = new BardLogger('Bard');
+export const logger = new GungnirLogger('Gungnir');

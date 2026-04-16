@@ -1,6 +1,6 @@
 import { Request, Response, NextFunction } from 'express';
 import { HttpException } from '../exceptions/http.exception';
-import { logger } from '../logger/bard-logger';
+import { logger } from '../logger/gungnir-logger';
 
 const log = logger.child('Exception');
 
