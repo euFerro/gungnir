@@ -194,8 +194,5 @@ export class GungnirApp {
   }
 }
 
-/** @deprecated Use GungnirApp instead */
-export const GungnirApp = GungnirApp;
-
 // -- Singleton --
 export const app = new GungnirApp();

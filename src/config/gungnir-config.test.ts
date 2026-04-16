@@ -1,14 +1,14 @@
 import { GungnirConfig, defineConfig, config } from './gungnir-config';
 
 describe('GungnirConfig', () => {
-  let GungnirConfig: GungnirConfig;
+  let gungnirConfig: GungnirConfig;
 
   const originalEnv = process.env;
 
   beforeEach(() => {
     jest.clearAllMocks();
     process.env = { ...originalEnv };
-    GungnirConfig = new GungnirConfig();
+    gungnirConfig = new GungnirConfig();
   });
 
   afterAll(() => {
@@ -21,30 +21,30 @@ describe('GungnirConfig', () => {
       process.env.NODE_ENV = 'development';
 
       // Act
-      GungnirConfig.init({});
+      gungnirConfig.init({});
 
       // Assert
-      expect(GungnirConfig.port).toBe(3000);
-      expect(GungnirConfig.jsonLimit).toBe('10mb');
-      expect(GungnirConfig.environment).toBe('development');
-      expect(GungnirConfig.isInitialized()).toBe(true);
+      expect(gungnirConfig.port).toBe(3000);
+      expect(gungnirConfig.jsonLimit).toBe('10mb');
+      expect(gungnirConfig.environment).toBe('development');
+      expect(gungnirConfig.isInitialized()).toBe(true);
     });
 
     it('should only initialize once', () => {
       // Arrange & Act
-      GungnirConfig.init({ port: 4000 });
-      GungnirConfig.init({ port: 5000 });
+      gungnirConfig.init({ port: 4000 });
+      gungnirConfig.init({ port: 5000 });
 
       // Assert
-      expect(GungnirConfig.port).toBe(4000);
+      expect(gungnirConfig.port).toBe(4000);
     });
 
     it('should resolve port from static number', () => {
       // Arrange & Act
-      GungnirConfig.init({ port: 8080 });
+      gungnirConfig.init({ port: 8080 });
 
       // Assert
-      expect(GungnirConfig.port).toBe(8080);
+      expect(gungnirConfig.port).toBe(8080);
     });
 
     it('should resolve port from env var with fallback to default', () => {
@@ -52,10 +52,10 @@ describe('GungnirConfig', () => {
       process.env.PORT = '9090';
 
       // Act
-      GungnirConfig.init({ port: { env: 'PORT', default: 3000 } });
+      gungnirConfig.init({ port: { env: 'PORT', default: 3000 } });
 
       // Assert
-      expect(GungnirConfig.port).toBe(9090);
+      expect(gungnirConfig.port).toBe(9090);
     });
 
     it('should use default port when env var is not set', () => {
@@ -63,34 +63,34 @@ describe('GungnirConfig', () => {
       delete process.env.PORT;
 
       // Act
-      GungnirConfig.init({ port: { env: 'PORT', default: 6767 } });
+      gungnirConfig.init({ port: { env: 'PORT', default: 6767 } });
 
       // Assert
-      expect(GungnirConfig.port).toBe(6767);
+      expect(gungnirConfig.port).toBe(6767);
     });
 
     it('should set jsonLimit', () => {
       // Arrange & Act
-      GungnirConfig.init({ jsonLimit: '50mb' });
+      gungnirConfig.init({ jsonLimit: '50mb' });
 
       // Assert
-      expect(GungnirConfig.jsonLimit).toBe('50mb');
+      expect(gungnirConfig.jsonLimit).toBe('50mb');
     });
 
     it('should set prefix', () => {
       // Arrange & Act
-      GungnirConfig.init({ prefix: '/api' });
+      gungnirConfig.init({ prefix: '/api' });
 
       // Assert
-      expect(GungnirConfig.prefix).toBe('/api');
+      expect(gungnirConfig.prefix).toBe('/api');
     });
 
     it('should default prefix to empty string', () => {
       // Arrange & Act
-      GungnirConfig.init({});
+      gungnirConfig.init({});
 
       // Assert
-      expect(GungnirConfig.prefix).toBe('');
+      expect(gungnirConfig.prefix).toBe('');
     });
   });
 
@@ -100,12 +100,12 @@ describe('GungnirConfig', () => {
       process.env.DB_URL = 'postgres://localhost/test';
 
       // Act
-      GungnirConfig.init({
+      gungnirConfig.init({
         env: { DB_URL: { required: true } },
       });
 
       // Assert
-      expect(GungnirConfig.env.DB_URL).toBe('postgres://localhost/test');
+      expect(gungnirConfig.env.DB_URL).toBe('postgres://localhost/test');
     });
 
     it('should use default when env var is not set', () => {
@@ -113,12 +113,12 @@ describe('GungnirConfig', () => {
       delete process.env.DB_POOL;
 
       // Act
-      GungnirConfig.init({
+      gungnirConfig.init({
         env: { DB_POOL: { default: '10' } },
       });
 
       // Assert
-      expect(GungnirConfig.env.DB_POOL).toBe('10');
+      expect(gungnirConfig.env.DB_POOL).toBe('10');
     });
 
     it('should throw when required env var is missing', () => {
@@ -127,7 +127,7 @@ describe('GungnirConfig', () => {
 
       // Act & Assert
       expect(() =>
-        GungnirConfig.init({
+        gungnirConfig.init({
           env: { SECRET_KEY: { required: true } },
         }),
       ).toThrow('Missing required environment variable: SECRET_KEY');
@@ -139,7 +139,7 @@ describe('GungnirConfig', () => {
 
       // Act & Assert
       expect(() =>
-        GungnirConfig.init({
+        gungnirConfig.init({
           env: { SECRET_KEY: { required: true } },
         }),
       ).not.toThrow();
@@ -167,11 +167,11 @@ describe('GungnirConfig', () => {
       process.env.NODE_ENV = 'development';
 
       // Act
-      GungnirConfig.init({ environments });
+      gungnirConfig.init({ environments });
 
       // Assert
-      expect(GungnirConfig.endpoints.api).toBe('https://dev.example.com/api');
-      expect(GungnirConfig.endpoints.auth).toBe('https://dev.example.com/auth');
+      expect(gungnirConfig.endpoints.api).toBe('https://dev.example.com/api');
+      expect(gungnirConfig.endpoints.auth).toBe('https://dev.example.com/auth');
     });
 
     it('should resolve endpoints for production when NODE_ENV is production', () => {
@@ -179,11 +179,11 @@ describe('GungnirConfig', () => {
       process.env.NODE_ENV = 'production';
 
       // Act
-      GungnirConfig.init({ environments });
+      gungnirConfig.init({ environments });
 
       // Assert
-      expect(GungnirConfig.endpoints.api).toBe('https://example.com/api');
-      expect(GungnirConfig.endpoints.auth).toBe('https://example.com/auth');
+      expect(gungnirConfig.endpoints.api).toBe('https://example.com/api');
+      expect(gungnirConfig.endpoints.auth).toBe('https://example.com/auth');
     });
 
     it('should fallback to development when NODE_ENV is unknown', () => {
@@ -191,10 +191,10 @@ describe('GungnirConfig', () => {
       process.env.NODE_ENV = 'staging';
 
       // Act
-      GungnirConfig.init({ environments });
+      gungnirConfig.init({ environments });
 
       // Assert
-      expect(GungnirConfig.endpoints.api).toBe('https://dev.example.com/api');
+      expect(gungnirConfig.endpoints.api).toBe('https://dev.example.com/api');
     });
   });
 
@@ -204,10 +204,10 @@ describe('GungnirConfig', () => {
       process.env.NODE_ENV = 'production';
 
       // Act
-      GungnirConfig.init({});
+      gungnirConfig.init({});
 
       // Assert
-      expect(GungnirConfig.isProduction()).toBe(true);
+      expect(gungnirConfig.isProduction()).toBe(true);
     });
 
     it('should return false for isProduction when NODE_ENV is development', () => {
@@ -215,25 +215,25 @@ describe('GungnirConfig', () => {
       process.env.NODE_ENV = 'development';
 
       // Act
-      GungnirConfig.init({});
+      gungnirConfig.init({});
 
       // Assert
-      expect(GungnirConfig.isProduction()).toBe(false);
+      expect(gungnirConfig.isProduction()).toBe(false);
     });
   });
 
   describe('reset', () => {
     it('should reset all state to defaults', () => {
       // Arrange
-      GungnirConfig.init({ port: 9999, jsonLimit: '50mb' });
+      gungnirConfig.init({ port: 9999, jsonLimit: '50mb' });
 
       // Act
-      GungnirConfig.reset();
+      gungnirConfig.reset();
 
       // Assert
-      expect(GungnirConfig.port).toBe(3000);
-      expect(GungnirConfig.jsonLimit).toBe('10mb');
-      expect(GungnirConfig.isInitialized()).toBe(false);
+      expect(gungnirConfig.port).toBe(3000);
+      expect(gungnirConfig.jsonLimit).toBe('10mb');
+      expect(gungnirConfig.isInitialized()).toBe(false);
     });
   });
 });

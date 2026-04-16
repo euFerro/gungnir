@@ -1,4 +1,4 @@
-import { GungnirApp, GungnirApp } from './gungnir-app';
+import { GungnirApp } from './gungnir-app';
 import { Module } from '../core/gungnir-module';
 
 describe('GungnirApp', () => {
